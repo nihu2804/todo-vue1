@@ -21,11 +21,11 @@ const Todo = Vue.component('todo', {
         return {
             newTask: "",
             tasks: [
-                /*  {
+                 {
                       text: "This is an example task. Delete or add your own",
                       checked: false,
                       id: 1
-                  }*/
+                  }
             ],
             count : 0,
             editingTask: {}
