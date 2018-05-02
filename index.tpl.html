@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vue</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.0/vue-resource.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js"></script>
+    <script src="js/require.js"></script>
+</head>
+
+<body>
+<div id="app">
+    <router-link to="/">Welcome</router-link>
+    <br><br>
+
+    <ul class="nav nav-pills">
+        <router-link :to="{ name: 'profile'}" tag="li">
+            <button class="btn btn-primary">Profile</button>
+        </router-link>
+        <router-link :to="{ name: 'todo'}" tag="li">
+            <button class="btn btn-primary">Todo</button>
+        </router-link>
+    </ul>
+
+    <router-view></router-view>
+</div>
+<template id="my-profile">
+    <div class="container">
+        <h3>Hey You ! </h3>
+    </div>
+</template>
+<template id="home">
+    <div class="container">
+        <h4>{{message}}</h4>
+    </div>
+</template>
+
+<template id="my-todo">
+
+    <div class="container" id="todo">
+        <h2>To do List</h2>
+        <section class="panel" style="display: inline;">
+            <input type="checkbox" id="mark-all" @click="selectAll" :checked="areAllSelected">
+            <input v-model="newTask" @keyup.enter="addTask" placeholder="What do you need to do?" autofocus
+                   class="text-input" style="width: 400px;">
+            <button @click="addTask" class="btn btn-primary"> Add</button>
+            <button @click="clearList" class="btn btn-primary">Clear List</button>
+        </section>
+
+        <section class="panel">
+            <ul class="list-item" style="display: inline;">
+                <span v-for="task in tasks" :class="{done: isChecked(task)}">
+                    <div style="display: flex">
+                    <input type="checkbox" class="checkbox" @click="check" v-model="task.checked" style="margin: 5px;">
+
+                    <input type="text" v-if="task === editingTask" v-auto-focus class="text-input"
+                           @keyup.enter="endEditing(task)" @blur="endEditing(task)" v-model="task.text"
+                           style="margin: 5px;">
+
+                        <router-link :to="{ name: 'todo-detail', params:{id:task.key}}" style="cursor: pointer">
+                            <label for="checkbox" v-if="task !== editingTask" @dblclick="editTask(task)"
+                                   style="margin: 5px;">{{ task.text }}</label>
+                        </router-link>
+                        <router-view></router-view>
+                    <button class="" v-if="task != editingTask" @click="editTask(task)" class="btn btn-primary"
+                            style="margin: 5px;">Edit</button>
+                        <button class="" v-if="task === editingTask" @click="endEditing(task)" class="btn btn-primary"
+                                style="margin: 5px;">Save</button>
+                    <button class="" @click="removeTask(task)" class="btn btn-primary"
+                            style="margin: 5px;">Delete</button>
+                    </div>
+
+                </span>
+            </ul>
+        </section>
+    </div>
+</template>
+
+<template id="todoDetail">
+    <div class="container">
+        <br>
+        <p>task: {{task.text}}</p>
+        <hr>
+        <p>task id: {{task.id}}</p>
+    </div>
+</template>
+
+</body>
+
+<script src="app.js"></script>
+</html>
